@@ -1,0 +1,117 @@
+<div id="app"  class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <!--:class="{'has-error': errors.has('email') }"-->
+                    <form @submit.prevent="validateBeforeSubmit"   class="form-horizontal">
+                        <input type="hidden" v-model="model._id">
+
+                        <div class="form-group"  :class="{'has-error': errors.has('name') }" >
+                            <label class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.name" v-validate="'required|'"  type="text" name="name" class="form-control">
+                                <span v-show="errors.has('name')" class="help-block m-b-none">{{errors.first('name')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <!--Logo-->
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">Logo</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.logo"   type="text" name="logo" class="form-control" placeholder="http://">
+                                <span v-show="errors.has('logo')" class="help-block m-b-none">{{errors.first('logo')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">link地址</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.url"   type="text" name="url" class="form-control" placeholder="http://">
+                                <span v-show="errors.has('url')" class="help-block m-b-none">{{errors.first('url')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+
+
+                        <!-- Button -->
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" >Cancel</button>
+                                <button class="btn btn-primary" > 保存 </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<%-contentFor('css')%>
+
+<%-contentFor('js')%>
+<!--Plugin-->
+<script>
+
+    Vue.use(VeeValidate);
+    var vm = new Vue({
+        el : '#app',
+        data : {
+            postUrl : inc.url.save,
+            directUrl : inc.url.list,
+            model : inc.model
+        },
+        mounted : function () {
+        },
+        methods : {
+            /* Validate */
+            validateBeforeSubmit : function () {
+                var $this = this;
+                this.$validator.validateAll().then(function(){
+                    // eslint-disable-next-line
+//                        alert('From Submitted!');
+                    $this.onSubmit();
+                }).catch(function(){
+                    // eslint-disable-next-line
+                });
+            },
+            /* Submit|Send */
+            onSubmit : function () {
+
+                var $this = this;
+                // var formData = new FormData($this.model);
+                // console.log(formData, $this.model);
+                this.$http.post($this.postUrl,  {model : $this.model})
+                    .then(function (json) {
+                        if (json.body.code == 200) {
+                            top.location = $this.directUrl;
+                        } else if (json.body.code == 300) {
+                            var errors = json.body.errors;
+                            for(var field in errors) {
+                                $this.errors.add(field, errors[field]);
+                            }
+                        }
+                    })
+            },
+
+        }
+    });
+</script>

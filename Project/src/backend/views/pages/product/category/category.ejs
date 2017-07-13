@@ -1,0 +1,93 @@
+<div id="app"  class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                    <!--:class="{'has-error': errors.has('email') }"-->
+                    <form @submit.prevent="validateBeforeSubmit"   class="form-horizontal">
+                        <input type="hidden" v-model="model._id">
+
+                        <div class="form-group">
+
+                            <div class="col-lg-3 ">
+
+                                <select v-model="cat1"  class="form-control" multiple="1"  style="height: 450px">
+                                    <template v-for="item in category.options1">
+                                    <option :value="item._id" selected="selected">{{item.name}}</option>
+                                    </template>
+                                </select>
+
+                            </div>
+                            <div class="col-lg-3 ">
+                                <select v-model="cat2"  class="form-control" multiple="1" style="height: 450px">
+                                    <template v-for="item in category.options2">
+                                        <option :value="item._id">{{item.name}}</option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 ">
+                                <select v-model="cat3"  class="form-control" multiple="1" style="height: 450px">
+                                    <template v-for="item in category.options3">
+                                        <option :value="item._id">{{item.name}}</option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 ">
+                                <select v-model="cat4"  class="form-control" multiple="1" style="height: 450px">
+                                    <template v-for="item in category.options4">
+                                        <option :value="item._id">{{item.name}}</option>
+                                    </template>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"  :class="{'has-error': errors.has('name') }">
+                            <div class="col-lg-12">
+                                <textarea class="form-control" name="name" v-model="model.name" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('name') }" type="text" placeholder="分类名称" ></textarea>
+                                <i v-show="errors.has('name')" class="fa fa-warning"></i>
+                                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <!-- Button -->
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-8">
+                                <a class="btn btn-danger"  @click="onCategoryDel()"> 删除 </a>
+                                <a class="btn btn-white"  @click="onCategoryEdit()"> 修改 </a>
+                                <button class="btn btn-primary" > 保存 </button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<%-contentFor('css')%>
+
+<%-contentFor('js')%>
+<!--Plugin-->
+<script type="text/javascript" src="/js/vue/vue.common.js"></script>
+
+

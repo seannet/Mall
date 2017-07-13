@@ -1,0 +1,193 @@
+<div id="app" class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+
+    <!--Search-->
+    <div class="ibox-content m-b-sm border-bottom">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="name">名称</label>
+                    <input v-model="search.name" @change="onChange" type="text" id="name" name="name" value="" placeholder="名称" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="mobile">SKU</label>
+                    <input v-model="search.sku" @change="onChange" type="text" id="mobile" name="sku" value="" placeholder="SKU" class="form-control">
+                </div>
+            </div>
+            <!--<div class="col-sm-2">-->
+            <!--<div class="form-group">-->
+            <!--<label class="control-label" for="quantity">Quantity</label>-->
+            <!--<input type="text" id="quantity" name="quantity" value="" placeholder="Quantity" class="form-control">-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="is_ban">是否被禁</label>
+                    <select v-model="search.is_ban" name="is_ban" id="is_ban" class="form-control">
+                        <option value="1" >禁止</option>
+                        <option value="0" selected>未禁止</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--Data Table-->
+    <div  class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <table class="table table-stripped" data-paging="true">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>SKU</th>
+                            <th>地址</th>
+                            <th>联系方式</th>
+                            <th>营业时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in items">
+                            <td>{{item.name}}</td>
+                            <td>{{item.sku}}</td>
+                            <td>
+                                {{item.location.address}}
+                                <span v-if="item.is_ban" class="label label-danger">锁定</span>
+                                <span v-else="" class="label label-primary">正常</span>
+                            </td>
+                            <td>{{item.created}}</td>
+                            <td>{{item.updated}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button @click="onEdit(item._id)" class="btn-white btn btn-xs">Edit</button>
+                                    <button @click="onBan(item._id)" class="btn-white btn btn-xs">Ban</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                        <!--Pagination-->
+                        <tfoot>
+                        <tr>
+                            <td colspan="6" class="footable-visible">
+                                <ul class="pagination pull-right">
+                                    <li class="footable-page-arrow disabled" :class="{disabled : (pagination.cur ==1)}" >
+                                        <a v-if="pagination.cur >1" data-page="first" @click="onFirst" href="#first">«</a>
+                                        <a v-else="" data-page="first" href="#">«</a>
+                                    </li>
+                                    <li class="footable-page-arrow disabled">
+                                        <a data-page="prev" @click="onPrev" href="#prev">‹</a>
+                                    </li>
+
+                                    <li v-for="n in pagination.pages" class="footable-page" :class="{active : (n==pagination.cur)}">
+                                        <a data-page="{{n}}" @click="onPage(n)" href="#">{{n}}</a>
+                                    </li>
+
+                                    <li class="footable-page-arrow">
+                                        <a data-page="next" @click="onNext" href="#next">›</a>
+                                    </li>
+                                    <li class="footable-page-arrow">
+                                        <a data-page="last" @click="onLast" href="#last">»</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                        <!--End Pagination-->
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%-contentFor('css')%>
+<%-contentFor('js')%>
+<script type="text/javascript">
+    var vm = new Vue({
+        el : '#app',
+        data : {
+            url : inc.url,
+            items : [],
+            search : {},
+            sort : {name : -1},
+            pagination : {
+                cur : 1,
+                total : 1,
+                pages : 10,
+                page : 1,
+                size : 60
+            }
+        },
+        mounted : function () {
+            this.onInit();
+            this.pagination.pages = Math.ceil(this.pagination.total/this.pagination.size);
+        },
+        methods : {
+            onInit : function () {
+                this.onRequest({});
+            },
+
+            onChange : function () {
+                this.onRequest(this.search);
+            },
+
+            onRequest : function(search) {
+                var $this = this;
+                this.$http.post($this.url.data, {
+                    search : $this.search,
+                    pagination : $this.pagination,
+                    sort : $this.sort
+                })
+                    .then(function (json) {
+                        var result = json.body;
+                        if (result.code == 200){
+                            $this.items = result.data.lists;
+                            $this.pagination.total = result.data.total;
+
+                        } else if (result.code == 300) {
+
+                        }
+                    })
+            },
+
+            /*Pagination*/
+
+            onPrev  : function () {
+                this.onPage(this.pagination.page -1);
+            },
+            onNext  : function () {
+                this.onPage(this.pagination.page +1);
+            },
+            onFirst : function () {
+                this.onPage(1);
+            },
+            onLast  : function () {
+                this.onPage(this.pagination.pages);
+            },
+
+            onPage  : function (page) {
+                var $this = this;
+                $this.pagination.page = page;
+                if ($this.pagination.page == $this.pagination.cur) {
+                    return false;
+                }
+                if($this.pagination.page > $this.pagination.pages) {
+                    $this.pagination.page = $this.pagination.pages;
+                } else if (page < 1) {
+                    $this.pagination.page = 1;
+                }
+
+                $this.pagination.cur = $this.pagination.page;
+
+                $this.onRequest();
+            }
+        }
+    });
+</script>

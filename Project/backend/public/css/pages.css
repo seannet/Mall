@@ -1,0 +1,45 @@
+.manage {
+  background-image: url(/img/background/universal03.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+form span.is-danger {
+  color: red;
+  font-weight: bold;
+  font-size: 16px;
+}
+.notfound {
+  background-color: #fff;
+  background-image: url(/img/background/404.gif);
+  background-size: cover;
+  background-position: center;
+}
+.notfound .text {
+  margin: 0 auto;
+  position: relative;
+  top: 300px;
+  background: transparent;
+  color: #fff;
+}
+.notfound {
+  background-color: #fff;
+  background-image: url(/img/background/lost.jpg);
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.notfound .text {
+  margin: 0 auto;
+  position: relative;
+  top: 300px;
+  background: transparent;
+  color: #fff;
+  width: 700px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 80px;
+}

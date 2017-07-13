@@ -1,0 +1,343 @@
+<%include ../index/include/header.ejs%>
+
+<div id="wrapper">
+
+    <%include ../index/include/nav%>
+
+    <div id="page-wrapper" class="gray-bg">
+        <%include ../index/include/top%>
+
+        <div id="top" class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>体育中心-添加</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a>体育中心</a>
+                    </li>
+                    <li class="active" >
+                        <a href="/center/list" >列表</a>
+                        <span>|</span>
+                        <strong>添加</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+
+
+        <div id="manager-add"  class="wrapper wrapper-content animated fadeInRight">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>添加 </h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <!--:class="{'has-error': errors.has('email') }"-->
+                            <form @submit.prevent="validateBeforeSubmit"   class="form-horizontal">
+
+                                <div class="form-group"  :class="{'has-error': errors.has('name') }" >
+                                    <label class="col-sm-2 control-label">名称</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="model.name" v-validate="'required|'"  type="text" name="name" class="form-control">
+                                        <span v-show="errors.has('name')" class="help-block m-b-none">{{errors.first('name')}}</span>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group" :class="{'has-error': errors.has('sku') }" >
+                                    <label class="col-sm-2 control-label">SKU</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="model.sku" v-validate="'required'"  type="text" name="sku" class="form-control">
+                                        <span v-show="errors.has('sku')" class="help-block m-b-none">{{errors.first('sku')}}</span>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label">运营时间</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-sm-6">
+                                            <strong>Open</strong><i class="fa fa-arrow-down"></i>
+                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                <input v-model="model.opentime.open" name="open" type="text" class="form-control" value="09:00" >
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock-o"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <strong>Close</strong><i class="fa fa-arrow-down"></i>
+                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                <input v-model="model.opentime.close" name="close" type="text" class="form-control" value="06:00" >
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock-o"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12">
+                                            <ul>
+                                                <li></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group"  :class="{'has-error': errors.has('address') }">
+                                    <label class="col-sm-2 control-label">地址</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control m-b" />
+                                        <input name="address" v-model="model.location.address" class="form-control"   v-validate="'required|'"/>
+                                        <span v-show="errors.has('address')" class="help-block m-b-none">{{errors.first('address')}}</span>
+
+                                        <!--Map-->
+                                        <div class="">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">价格</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group m-b col-sm-4"><span class="input-group-addon"><i class="fa fa-cny"></i></span> <input v-model="model.price.year"   v-validate="" type="text" class="form-control"> <span class="input-group-addon">.00元/年</span></div>
+                                        <div class="input-group m-b col-sm-4"><span class="input-group-addon"><i class="fa fa-cny"></i></span> <input v-model="model.price.season" v-validate="" type="text" class="form-control"> <span class="input-group-addon">.00元/季</span></div>
+                                        <div class="input-group m-b col-sm-4"><span class="input-group-addon"><i class="fa fa-cny"></i></span> <input v-model="model.price.month"  v-validate="" type="text" class="form-control"> <span class="input-group-addon">.00元/月</span></div>
+                                        <div class="input-group m-b col-sm-4"><span class="input-group-addon"><i class="fa fa-cny"></i></span> <input v-model="model.price.week"   v-validate="" type="text" class="form-control"> <span class="input-group-addon">.00元/周</span></div>
+                                        <div class="input-group m-b col-sm-4"><span class="input-group-addon"><i class="fa fa-cny"></i></span> <input v-model="model.price.daily"  v-validate="" type="text" class="form-control"> <span class="input-group-addon">.00元/日</span></div>
+
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2">图片</label>
+                                    <div class="col-sm-10">
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+    <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+    <span class="fileinput-exists">Change</span><input v-model="model.files" v-on:change="attachFile"  type="file" name="..."/></span>
+                                            <span class="fileinput-filename"></span>
+                                            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                            <img :src="result"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2">详细信息</label>
+                                    <div class="col-sm-10">
+                                        <textarea v-model="model.describe" id="summernote1" class="summernote"></textarea>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <!-- Button -->
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                        <button class="btn btn-white" >Cancel</button>
+                                        <button class="btn btn-primary" > 保存 </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+<link href="/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+<link href="/css/plugins/summernote/summernote.css" rel="stylesheet">
+<link href="/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+<link href="/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/js/inspinia.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>
+
+<!-- Plugins -->
+<script src="/js/plugins/clockpicker/clockpicker.js"></script>
+<script src="/js/plugins/summernote/summernote.min.js"></script>
+
+<!--Vue-->
+<script src="/js/vue/vue.min.js"></script>
+<script src="/js/vue/vue-resource.min.js"></script>
+<script src="/js/vue/vee-validate.min.js"></script>
+
+<script>
+    Vue.use(VeeValidate);
+    var vm = new Vue({
+        el : '#wrapper',
+        data : {
+            inc : inc,
+            result : null,
+            model : {
+                name        : '',
+                sku         : '',
+                opentime    : {
+                    open    : '09:00',
+                    close   : '18:00',
+                },
+                price       : {
+                    year    : '',
+                    season  : '',
+                    month   : '',
+                    week    : '',
+                    daily   : ''
+                },
+                location : {
+                    address : ''
+                },
+                images      : [],
+                files      : [],
+                result : null,
+                describe    : '做个Test'
+            }
+        },
+        mounted : function () {
+            var $this = this;
+            /* ClockPicker */
+            $('.clockpicker').clockpicker();
+            $('input[name="open"]').on('change', function () {
+                $this.model.opentime.open = $(this).val();
+            })
+            $('input[name="close"]').on('change', function () {
+                $this.model.opentime.close = $(this).val();
+            })
+            /* Summernote */
+            $('#summernote1').summernote({
+                height : 300,
+                callbacks : {
+                    onBlur : function (e) {
+                        $this.model.describe = $(this).summernote('code');
+                    }
+                }
+            });
+
+        },
+        methods : {
+            jqueryOnChange  : function () {
+              var $this = this;
+            },
+
+            attachFile : function (e) {
+                var $this = this;
+                // console.log(e);
+                var files = e.target.files || e.dataTransfer.files;
+                var file = files[0];
+                // console.log(files);
+
+                /* Upload */
+                this.uploadFile(files);
+                /* Show Image */
+                $this.showImage(file);
+            },
+
+            showImage : function(file){
+                var $this = this;
+
+                var reader = new FileReader();
+
+                 reader.onloadend = function () {
+                    // 图片的 base64 格式, 可以直接当成 img 的 src 属性值
+                    var dataURL = reader.result;
+                    var img = new Image();
+                    $this.result = dataURL;
+                    $this.model.result = dataURL;
+                    // $this.model.files.push(dataURL);
+                    img.src = dataURL;
+                    console.log(img);
+                    // 插入到 DOM 中预览
+                // ...
+                };
+
+                reader.readAsDataURL(file); // 读出 base64
+            },
+
+            uploadFile : function(files) {
+                    console.log(files, typeof files);
+                        var file = files[0];
+
+                         var formData = new FormData();
+                        formData.append('file', file);
+
+                        this.$http.post('/upload', formData).then(function(res){
+                            console.log(res);
+                        }) ;
+                // files.forEach(function(file){
+                // var formData = new FormData();
+                // formData.append('files', files);
+
+                // this.$http.post('/upload', formData).then(function(res){
+                //         console.log(res);
+                // }) ;
+                // // })
+            },
+
+            /* Validate */
+            validateBeforeSubmit : function () {
+                var $this = this;
+                this.$validator.validateAll().then(function(){
+                    // eslint-disable-next-line
+//                        alert('From Submitted!');
+                    $this.onSubmit();
+                }).catch(function(){
+                    // eslint-disable-next-line
+                });
+            },
+            /* Submit|Send */
+            onSubmit : function () {
+
+                var $this = this;
+                // var formData = new FormData($this.model);
+                // console.log(formData, $this.model);
+                this.$http.post('/center/add/save',  {model : $this.model})
+                    .then(function (json) {
+                        if (json.body.code == 200) {
+                            top.location = '/';
+                        } else if (json.body.code == 300) {
+                            var errors = json.body.errors;
+                            for(var field in errors) {
+                                $this.errors.add(field, errors[field]);
+                            }
+                        }
+                    })
+            },
+            
+            /*Control*/
+            onBan : function () {
+                
+            }
+        }
+    })
+
+</script>
+<%include ../index/include/footer.ejs%>

@@ -1,0 +1,20 @@
+<ul class="pagination pull-right">
+    <li class="footable-page-arrow " :class="{disabled : (pagination.cur ==1)}" >
+        <a v-if="pagination.cur >1" data-page="first" @click="onFirst" href="#first">«</a>
+        <a v-else="" data-page="first" href="#">«</a>
+    </li>
+    <li class="footable-page-arrow " :class="{disabled : (pagination.cur ==1)}" >
+        <a data-page="prev" @click="onPrev" >‹</a>
+    </li>
+
+    <li v-for="n in pagination.pages" class="footable-page" :class="{active : (n==pagination.cur)}">
+        <a data-page="{{n}}" @click="onPage(n)" >{{n}}</a>
+    </li>
+
+    <li class="footable-page-arrow" :class="{disabled : (pagination.cur==pagination.page)}">
+        <a data-page="next" @click="onNext" >›</a>
+    </li>
+    <li class="footable-page-arrow" :class="{disabled : (pagination.cur==pagination.page)}">
+        <a data-page="last" @click="onLast" >»</a>
+    </li>
+</ul>

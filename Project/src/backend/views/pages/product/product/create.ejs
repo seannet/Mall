@@ -1,0 +1,18 @@
+
+    <form @submit.prevent="validateBeforeSubmit"   class="form-horizontal">
+        <input type="hidden" v-model="model._id">
+
+        <template v-model="category" :value="true"></template>
+
+        <!-- Button -->
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-8">
+                <button class="btn btn-white" > 取消 </button>
+                <button class="btn btn-primary" > 保存 </button>
+            </div>
+        </div>
+    </form>
+
+<%-contentFor('css')%>
+
+<%-contentFor('js')%>

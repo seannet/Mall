@@ -1,0 +1,39 @@
+<%include ../partial/header.ejs%>
+
+<div id="wrapper">
+
+    <%include ../partial/nav%>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <%include ../partial/toptoolbar.ejs%>
+
+        <!--内容页头部man Title-->
+        <div id="top" class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2><%=temp.title%> <a class="btn btn-primary" href="<%=url.create%>"><i class="fa fa-plus"></i></a></h2>
+                <!--<ol class="breadcrumb">-->
+                    <!--<li>-->
+                        <!--<a href="/">Home</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a>体育中心</a>-->
+                    <!--</li>-->
+                    <!--<li class="active" v-for="item in temp.urls">-->
+                        <!--<strong>列表</strong>-->
+                        <!--<span>|</span>-->
+                        <!--<a href="/center/add" :href="item.url" >添加</a>-->
+                    <!--</li>-->
+                <!--</ol>-->
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+
+        <!--Content-->
+        <%- body%>
+    </div>
+</div>
+
+<%include ../partial/footer%>

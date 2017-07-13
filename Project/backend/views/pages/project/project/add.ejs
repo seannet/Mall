@@ -1,0 +1,217 @@
+<div id="app"  class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <!--:class="{'has-error': errors.has('email') }"-->
+                    <form @submit.prevent="validateBeforeSubmit"   class="form-horizontal">
+
+                        <div class="form-group"  :class="{'has-error': errors.has('name') }" >
+                            <label class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.name" v-validate="'required|'"  type="text" name="name" class="form-control">
+                                <span v-show="errors.has('name')" class="help-block m-b-none">{{errors.first('name')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <!--Demo地址-->
+                        <div class="form-group"  :class="{'has-error': errors.has('demoUrl') }" >
+                            <label class="col-sm-2 control-label">Demo地址</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.demoUrl"   type="text" name="demoUrl" class="form-control" placeholder="http://">
+                                <span v-show="errors.has('demoUrl')" class="help-block m-b-none">{{errors.first('demoUrl')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">正式环境地址</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.productUrl"   type="text" name="productUrl" class="form-control" placeholder="http://">
+                                <span v-show="errors.has('productUrl')" class="help-block m-b-none">{{errors.first('productUrl')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">代码地址</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.gitUrl"   type="text" name="gitUrl" class="form-control" placeholder="http://">
+                                <span v-show="errors.has('gitUrl')" class="help-block m-b-none">{{errors.first('gitUrl')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">文档地址</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.docUrl"   type="text" name="productUrl" class="form-control" placeholder="http://">
+                                <span v-show="errors.has('productUrl')" class="help-block m-b-none">{{errors.first('productUrl')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">文件地址</label>
+                            <div class="col-sm-10">
+                                <input v-model="model.fileUrl"   type="text" name="productUrl" class="form-control" placeholder="http://">
+                                <span v-show="errors.has('productUrl')" class="help-block m-b-none">{{errors.first('productUrl')}}</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">详细信息</label>
+                            <div class="col-sm-10">
+                                <textarea v-model="model.desc" id="summernote1" class="summernote"></textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">服务器</label>
+                            <div class="col-sm-10">
+                                <select v-model="model.Server" class="form-control m-b" name="model.Server">
+                                    <template v-for="server in forms.serverList">
+                                        <option :value="server._id">{{server.name}}</option>
+                                    </template>
+                                </select>
+
+                                <button class="btn btn-primary"><i class="fa fa-plus"></i> 添加服务器 </button>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">域名</label>
+                            <div class="col-sm-10">
+                                <select v-model="model.Domain" class="form-control m-b" name="model.domain">
+                                    <template v-for="domain in forms.domainList">
+                                        <option :value="domain._id">{{domain.name}}</option>
+                                    </template>
+                                </select>
+
+                                <button class="btn btn-primary"><i class="fa fa-plus"></i> 添加域名服务商 </button>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <!-- Button -->
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" >Cancel</button>
+                                <button class="btn btn-primary" > 保存 </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<%-contentFor('css')%>
+<link href="/css/plugins/summernote/summernote.css" rel="stylesheet">
+<link href="/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+
+<%-contentFor('js')%>
+<!--Plugin-->
+<script src="/js/plugins/summernote/summernote.min.js"></script>
+<script>
+
+    Vue.use(VeeValidate);
+    var vm = new Vue({
+        el : '#app',
+        data : {
+            postUrl : inc.url.save,
+            directUrl : inc.url.list,
+            url : inc.url,
+            forms : {
+                serverList : [],
+                domainList : [],
+            },
+            model : inc.model
+        },
+        mounted : function () {
+            var $this = this;
+            /*Load Form json*/
+            this.loadForm();
+
+            /* Summernote */
+            $('#summernote1').summernote({
+                height : 300,
+                callbacks : {
+                    onBlur : function (e) {
+                        $this.model.desc = $(this).summernote('code');
+                    }
+                }
+            });
+        },
+        methods : {
+            /* Validate */
+            validateBeforeSubmit : function () {
+                var $this = this;
+                this.$validator.validateAll().then(function(){
+                    // eslint-disable-next-line
+//                        alert('From Submitted!');
+                    $this.onSubmit();
+                }).catch(function(){
+                    // eslint-disable-next-line
+                });
+            },
+            /* Submit|Send */
+            onSubmit : function () {
+
+                var $this = this;
+                // var formData = new FormData($this.model);
+                // console.log(formData, $this.model);
+                this.$http.post($this.postUrl,  {model : $this.model})
+                    .then(function (json) {
+                        if (json.body.code == 200) {
+                            top.location = $this.directUrl;
+                        } else if (json.body.code == 300) {
+                            var errors = json.body.errors;
+                            for(var field in errors) {
+                                $this.errors.add(field, errors[field]);
+                            }
+                        }
+                    })
+            },
+
+            loadForm :function () {
+                var $this = this;
+                this.$http.post($this.url.form).then(function (res) {
+                    if (res.body.code == 200) {
+                        $this.forms = res.body.data.form;
+                    }
+                })
+            },
+            
+            onAddServer : function () {
+                
+            },
+            
+            onAddDomain : function () {
+
+            }
+
+        }
+    });
+</script>

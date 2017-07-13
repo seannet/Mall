@@ -1,0 +1,221 @@
+
+        <div id="app" class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+
+            <div class="ibox-content m-b-sm border-bottom">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="email">Email</label>
+                            <input v-model="search.email" @change="onChange" type="text" id="email" name="email" value="" placeholder="Email" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label" for="mobile">Mobile</label>
+                            <input v-model="search.mobile" type="text" id="mobile" name="mobile" value="" placeholder="Mobile" class="form-control">
+                        </div>
+                    </div>
+                    <!--<div class="col-sm-2">-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="control-label" for="quantity">Quantity</label>-->
+                            <!--<input type="text" id="quantity" name="quantity" value="" placeholder="Quantity" class="form-control">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="is_ban">是否被禁</label>
+                            <select v-model="search.is_ban" name="is_ban" id="is_ban" class="form-control">
+                                <option value="1" >禁止</option>
+                                <option value="0" selected>未禁止</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div  class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+
+                            
+                            <table class="table table-stripped" data-paging="true">
+                                <thead>
+                                    <tr>
+                                        <th>组名</th>
+                                        <th>关键字</th>
+                                        <th>是否禁用</th>
+                                        <th>创建</th>
+                                        <th>修改</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in items">
+                                        <td>{{item.email}}</td>
+                                        <td>{{item.mobile}}</td>
+                                        <td>
+                                            <span v-if="item.is_ban" class="label label-danger">锁定</span>
+                                            <span v-else="" class="label label-primary">正常</span>
+                                        </td>
+                                        <td>{{item.created}}</td>
+                                        <td>{{item.updated}}</td>
+                                        <td><div class="btn-group">
+                                                <button v-show="!item.is_admin" @click="onEdit(item._id)" class="btn-white btn btn-xs">Edit</button>
+                                                <button v-show="!item.is_admin" @click="onBan(item._id)" class="btn-white btn btn-xs">Ban</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="footable-visible">
+                                            <%include ../../../partial/widget/pagination.ejs%>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    </div>
+
+
+<%-contentFor('css')%>
+<link href="/css/plugins/footable/footable.core.css" rel="stylesheet">
+
+<%-contentFor('js')%>
+<script src="/js/plugins/footable/footable.all.min.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el : '#app',
+        data : {
+            search : {
+                email : '',
+                mobile : '',
+                is_ban : ''
+            },
+            pagination : {
+                cur : 1,
+                total : 1,
+                pages : 1,
+                page : 1,
+                size : 60
+            },
+            items : []
+        },
+        computed : function () {
+
+        },
+        mounted : function () {
+            this.onInit();
+        },
+        methods : {
+            onInit : function () {
+                var $this = this;
+                this.$http.post('/manager/list/data', {})
+                    .then(function (json) {
+                        var result = json.body;
+                        if (result.code == 200){
+                            $this.items = result.data.lists;
+
+                        } else if (result.code == 300) {
+
+                        }
+                    })
+            },
+
+            onChange : function () {
+                var $this = this;
+                this.$http.post('/manager/list/data', {search : $this.search, pagination : $this.pagination})
+                    .then(function (json) {
+                    var result = json.body;
+                    if (result.code == 200){
+                        $this.items = result.data.lists;
+
+                    } else if (result.code == 300) {
+
+                    }
+                })
+            },
+
+            onRequest : function(search) {
+                var $this = this;
+                this.$http.post($this.url.data, {
+                    search : $this.search,
+                    pagination : $this.pagination,
+                    sort : $this.sort
+                })
+                    .then(function (json) {
+                        var result = json.body;
+                        if (result.code == 200){
+                            $this.items = result.data.lists;
+                            $this.pagination.total = result.data.total;
+
+                        } else if (result.code == 300) {
+
+                        }
+                    })
+            },
+
+
+            onPrev  : function () {
+                if (this.cur > 1)
+                this.onPage(this.pagination.page -1);
+                return false;
+            },
+            onNext  : function () {
+                if (this.cur < this.pages)
+                this.onPage(this.pagination.page +1);
+                return false;
+            },
+            onFirst : function () {
+                if (this.cur >1)
+                this.onPage(1);
+                return false;
+            },
+            onLast  : function () {
+                if (this.cur < this.pages)
+                this.onPage(this.pagination.pages);
+                return false;
+            },
+            onPage  : function (page) {
+                var $this = this;
+                $this.pagination.page = page;
+
+                if($this.pagination.page > $this.pagination.pages) {
+                    $this.pagination.page = $this.pagination.pages;
+                } else if (page < 1) {
+                    $this.pagination.page = 1;
+                }
+
+                $this.pagination.cur = $this.pagination.page;
+
+                $this.onRequest();
+            },
+
+            onBan : function (id) {
+                var $this = this;
+                this.$http.post('/manager/ban', {id : id})
+                    .then(function (res) {
+                        if (res.body.code == 200) {
+                            $this.onInit();
+                        }
+                    });
+            },
+
+            onEdit : function (id) {
+                console.log(id);
+            }
+        },
+
+
+    });
+</script>
+
